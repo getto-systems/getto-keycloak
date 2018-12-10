@@ -1,5 +1,4 @@
 /keycloak/
-/modules/
 /tmp/
 
 /.secret.envrc
