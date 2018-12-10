@@ -1,0 +1,7 @@
+image: buildpack-deps:stretch
+
+release:
+  only:
+    - release@getto-systems-labo/keycloak
+  script:
+    - ./bin/push_tags.sh
