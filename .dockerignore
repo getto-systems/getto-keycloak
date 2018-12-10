@@ -1,0 +1,5 @@
+.git
+.envrc
+.secret.envrc
+keycloak
+tmp
