@@ -24,5 +24,6 @@ COPY --from=builder /opt/keycloak /opt/keycloak
 COPY keycloak/standalone/configuration/standalone-ha.xml /opt/keycloak/standalone/configuration/standalone-ha.xml
 COPY keycloak/modules/system/layers/keycloak/com/mysql /opt/keycloak/modules/system/layers/keycloak/com/mysql
 COPY --from=builder /opt/mysql-connector-java.jar /opt/keycloak/modules/system/layers/keycloak/com/mysql/main/mysql-connector-java.jar
+COPY entrypoint.sh /opt/entrypoint.sh
 
-CMD ["/opt/keycloak/bin/standalone.sh", "-b", "0.0.0.0", "--server-config=standalone-ha.xml", "-Djava.security.egd=file:/dev/urandom", "-Dsystems.getto.keycloak.mysql.connectionurl='jdbc:mysql://localhost:3306/keycloak?useSSL=false'", "-Dsystems.getto.keycloak.mysql.username=$DB_USERNAME", "-Dsystems.getto.keycloak.mysql.password=$DB_PASSWORD"]
+ENTRYPOINT [ "/opt/entrypoint.sh" ]
