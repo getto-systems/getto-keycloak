@@ -1,3 +1,7 @@
+# Version : 0.4.0
+
+fix: entrypoint
+
 # Version : 0.3.1
 
 fix: db username
