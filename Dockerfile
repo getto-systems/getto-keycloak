@@ -25,4 +25,4 @@ COPY keycloak/standalone/configuration/standalone-ha.xml /opt/keycloak/standalon
 COPY keycloak/modules/system/layers/keycloak/com/mysql /opt/keycloak/modules/system/layers/keycloak/com/mysql
 COPY --from=builder /opt/mysql-connector-java.jar /opt/keycloak/modules/system/layers/keycloak/com/mysql/main/mysql-connector-java.jar
 
-CMD ["/opt/keycloak/bin/standalone.sh", "-b", "0.0.0.0", "--server-config=standalone-ha.xml", "-Djava.security.egd=file:/dev/urandom", "-Dsystems.getto.keycloak.mysql.connectionurl='jdbc:mysql://$DEV_DB/keycloak?useSSL=false'", "-Dsystems.getto.keycloak.mysql.username=$DEV_DB_USERNAME", "-Dsystems.getto.keycloak.mysql.password=$DEV_DB_PASSWORD"]
+CMD ["/opt/keycloak/bin/standalone.sh", "-b", "0.0.0.0", "--server-config=standalone-ha.xml", "-Djava.security.egd=file:/dev/urandom", "-Dsystems.getto.keycloak.mysql.connectionurl='jdbc:mysql://localhost:3306/keycloak?useSSL=false'", "-Dsystems.getto.keycloak.mysql.username=$DEV_DB_USERNAME", "-Dsystems.getto.keycloak.mysql.password=$DEV_DB_PASSWORD"]
