@@ -1,4 +1,5 @@
 .git
 .envrc
 .secret.envrc
+bin
 tmp
