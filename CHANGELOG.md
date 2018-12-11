@@ -1,3 +1,7 @@
+# Version : 0.7.0
+
+fix: node name
+
 # Version : 0.6.0
 
 fix: node id
