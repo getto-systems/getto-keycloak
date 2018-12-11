@@ -1,3 +1,7 @@
+# Version : 0.5.0
+
+fix: cluster config
+
 # Version : 0.4.1
 
 fix: entrypoint
