@@ -1,3 +1,7 @@
+# Version : 0.6.0
+
+fix: node id
+
 # Version : 0.5.0
 
 fix: cluster config
