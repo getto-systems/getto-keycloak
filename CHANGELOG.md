@@ -1,3 +1,7 @@
+# Version : 0.3.1
+
+fix: db username
+
 # Version : 0.3.0
 
 fix: production connection url
