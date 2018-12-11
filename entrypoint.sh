@@ -1,3 +1,5 @@
+#!/bin/bash
+
 /opt/keycloak/bin/standalone.sh \
     -b 0.0.0.0 \
     --server-config=standalone-ha.xml \
