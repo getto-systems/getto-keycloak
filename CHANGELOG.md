@@ -1,3 +1,7 @@
+# Version : 0.9.3
+
+fix: data type
+
 # Version : 0.9.2
 
 fix: initialize_sql
