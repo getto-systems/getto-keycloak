@@ -143,7 +143,7 @@
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/ClusteringDS" pool-name="ClusteringDS" enabled="true" use-java-context="true" use-ccm="true">
                     <connection-url>${systems.getto.keycloak.jbossclustering.connectionurl}&amp;characterEncoding=UTF-8</connection-url>
-                    <driver>postgresql</driver>
+                    <driver>mysql</driver>
                     <security>
                         <user-name>${env.DB_USERNAME}</user-name>
                         <password>${env.DB_PASSWORD}</password>
