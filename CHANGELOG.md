@@ -1,3 +1,7 @@
+# Version : 0.9.2
+
+fix: initialize_sql
+
 # Version : 0.9.1
 
 fix: clusteringDS driver
