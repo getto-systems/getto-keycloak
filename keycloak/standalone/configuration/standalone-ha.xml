@@ -331,7 +331,7 @@
                                 bind_addr varchar(200) NOT NULL,
                                 created timestamp NOT NULL,
                                 cluster_name varchar(200) NOT NULL,
-                                ping_data BYTEA,
+                                ping_data BLOB,
                                 PRIMARY KEY (own_addr, cluster_name)
                             )
                         </property>
