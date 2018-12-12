@@ -7,6 +7,5 @@
     -Djboss.tx.node.id=node$((RANDOM)) \
     -Djboss.node.name=node$((RANDOM)) \
     -Dsystems.getto.keycloak.mysql.connectionurl='jdbc:mysql://localhost:3306/keycloak?useSSL=false' \
-    -Dsystems.getto.keycloak.mysql.username=$DB_USERNAME \
-    -Dsystems.getto.keycloak.mysql.password=$DB_PASSWORD \
+    -Dsystems.getto.keycloak.jbossclustering.connectionurl='jdbc:mysql://localhost:3306/jbossclustering?useSSL=false' \
 ;
