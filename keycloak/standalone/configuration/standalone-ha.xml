@@ -13,7 +13,6 @@
         <extension module="org.jboss.as.jpa"/>
         <extension module="org.jboss.as.logging"/>
         <extension module="org.jboss.as.mail"/>
-        <extension module="org.jboss.as.modcluster"/>
         <extension module="org.jboss.as.naming"/>
         <extension module="org.jboss.as.remoting"/>
         <extension module="org.jboss.as.security"/>
@@ -133,8 +132,21 @@
                         <max-pool-size>15</max-pool-size>
                     </pool>
                     <security>
-                        <user-name>${systems.getto.keycloak.mysql.username}</user-name>
-                        <password>${systems.getto.keycloak.mysql.password}</password>
+                        <user-name>${env.DB_USERNAME}</user-name>
+                        <password>${env.DB_PASSWORD}</password>
+                    </security>
+                    <validation>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
+                    </validation>
+                </datasource>
+                <datasource jndi-name="java:jboss/datasources/ClusteringDS" pool-name="ClusteringDS" enabled="true" use-java-context="true" use-ccm="true">
+                    <connection-url>${systems.getto.keycloak.jbossclustering.connectionurl}&amp;characterEncoding=UTF-8</connection-url>
+                    <driver>postgresql</driver>
+                    <security>
+                        <user-name>${env.DB_USERNAME}</user-name>
+                        <password>${env.DB_PASSWORD}</password>
                     </security>
                     <validation>
                         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
@@ -302,27 +314,37 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jgroups:6.0">
             <channels default="ee">
-                <channel name="ee" stack="udp" cluster="ejb"/>
+                <channel name="ee" stack="tcp"/>
             </channels>
             <stacks>
-                <stack name="udp">
-                    <transport type="UDP" socket-binding="jgroups-udp"/>
-                    <protocol type="PING"/>
-                    <protocol type="MERGE3"/>
-                    <protocol type="FD_SOCK"/>
-                    <protocol type="FD_ALL"/>
-                    <protocol type="VERIFY_SUSPECT"/>
-                    <protocol type="pbcast.NAKACK2"/>
-                    <protocol type="UNICAST3"/>
-                    <protocol type="pbcast.STABLE"/>
-                    <protocol type="pbcast.GMS"/>
-                    <protocol type="UFC"/>
-                    <protocol type="MFC"/>
-                    <protocol type="FRAG3"/>
-                </stack>
                 <stack name="tcp">
-                    <transport type="TCP" socket-binding="jgroups-tcp"/>
-                    <socket-protocol type="MPING" socket-binding="jgroups-mping"/>
+                    <transport type="TCP" socket-binding="jgroups-tcp">
+                        <property name="external_addr">${env.HOST_IP}</property>
+                        <property name="use_ip_addrs">true</property>
+                    </transport>
+                    <protocol type="org.jgroups.protocols.JDBC_PING">
+                        <property name="datasource_jndi_name">java:jboss/datasources/ClusteringDS</property>
+
+                        <property name="initialize_sql">
+                            CREATE TABLE IF NOT EXISTS JGROUPSPING (
+                                own_addr varchar(200) NOT NULL,
+                                bind_addr varchar(200) NOT NULL,
+                                created timestamp NOT NULL,
+                                cluster_name varchar(200) NOT NULL,
+                                ping_data BYTEA,
+                                constraint PK_JGROUPSPING PRIMARY KEY (own_addr, cluster_name)
+                            )
+                        </property>
+                        <property name="insert_single_sql">
+                            INSERT INTO JGROUPSPING (own_addr, bind_addr, created, cluster_name, ping_data) values (?,'${env.HOST_IP}',NOW(), ?, ?)
+                        </property>
+                        <property name="delete_single_sql">
+                            DELETE FROM JGROUPSPING WHERE own_addr=? AND cluster_name=?
+                        </property>
+                        <property name="select_all_pingdata_sql">
+                            SELECT ping_data FROM JGROUPSPING WHERE cluster_name=?
+                        </property>
+                    </protocol>
                     <protocol type="MERGE3"/>
                     <protocol type="FD_SOCK"/>
                     <protocol type="FD_ALL"/>
@@ -330,7 +352,10 @@
                     <protocol type="pbcast.NAKACK2"/>
                     <protocol type="UNICAST3"/>
                     <protocol type="pbcast.STABLE"/>
-                    <protocol type="pbcast.GMS"/>
+                    <protocol type="pbcast.GMS">
+                        <property name="print_physical_addrs">true</property>
+                        <property name="print_local_addr">true</property>
+                    </protocol>
                     <protocol type="MFC"/>
                     <protocol type="FRAG3"/>
                 </stack>
@@ -348,13 +373,6 @@
             <mail-session name="default" jndi-name="java:jboss/mail/Default">
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
             </mail-session>
-        </subsystem>
-        <subsystem xmlns="urn:jboss:domain:modcluster:4.0">
-            <proxy name="default" advertise-socket="modcluster" listener="ajp">
-                <dynamic-load-provider>
-                    <load-metric type="cpu"/>
-                </dynamic-load-provider>
-            </proxy>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <remote-naming/>
@@ -629,9 +647,8 @@
         <socket-binding name="https" port="${jboss.https.port:8443}"/>
         <socket-binding name="proxy-https" port="443"/>
         <socket-binding name="jgroups-mping" interface="private" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45700"/>
-        <socket-binding name="jgroups-tcp" interface="private" port="7600"/>
+        <socket-binding name="jgroups-tcp" interface="public" port="7600"/>
         <socket-binding name="jgroups-udp" interface="private" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
-        <socket-binding name="modcluster" multicast-address="${jboss.modcluster.multicast.address:224.0.1.105}" multicast-port="23364"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>
         <socket-binding name="txn-status-manager" port="4713"/>
         <outbound-socket-binding name="mail-smtp">
