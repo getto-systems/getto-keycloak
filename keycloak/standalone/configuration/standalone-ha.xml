@@ -332,7 +332,7 @@
                                 created timestamp NOT NULL,
                                 cluster_name varchar(200) NOT NULL,
                                 ping_data BYTEA,
-                                constraint PK_JGROUPSPING PRIMARY KEY (own_addr, cluster_name)
+                                PRIMARY KEY (own_addr, cluster_name)
                             )
                         </property>
                         <property name="insert_single_sql">
