@@ -1,3 +1,7 @@
+# Version : 0.9.1
+
+fix: clusteringDS driver
+
 # Version : 0.9.0
 
 fix: jdbc ping configure
