@@ -1,3 +1,7 @@
+# Version : 0.10.0
+
+fix: clustering setting
+
 # Version : 0.9.3
 
 fix: data type
