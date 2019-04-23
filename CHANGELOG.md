@@ -1,3 +1,7 @@
+# Version : 0.11.2
+
+test: docker hub
+
 # Version : 0.11.1
 
 test: docker hub
