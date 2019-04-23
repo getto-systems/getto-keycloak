@@ -1,18 +1,18 @@
 FROM buildpack-deps:stretch as builder
 
-ENV KEYCLOAK_VERSION=4.7.0.Final
-ENV MYSQL_VERSION=8.0.13
+ENV KEYCLOAK_VERSION=6.0.0
+ENV MYSQL_VERSION=8.0.15
 
 COPY signature /opt
 
 WORKDIR /opt
 
 RUN set -x && \
-    curl -L https://downloads.jboss.org/keycloak/${KEYCLOAK_VERSION}/keycloak-${KEYCLOAK_VERSION}.tar.gz --output keycloak-4.7.0.Final.tar.gz && \
+    curl -L https://downloads.jboss.org/keycloak/${KEYCLOAK_VERSION}/keycloak-${KEYCLOAK_VERSION}.tar.gz > keycloak-${KEYCLOAK_VERSION}.tar.gz && \
     sha1sum -c sha1/keycloak-${KEYCLOAK_VERSION}.tar.gz.sha1 && \
     tar xzf keycloak-${KEYCLOAK_VERSION}.tar.gz && \
     mv keycloak-${KEYCLOAK_VERSION} keycloak && \
-    curl -L https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_VERSION}.tar.gz --output mysql-connector-java-8.0.13.tar.gz && \
+    curl -L https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_VERSION}.tar.gz > mysql-connector-java-${MYSQL_VERSION}.tar.gz && \
     md5sum -c md5/mysql-connector-java-${MYSQL_VERSION}.tar.gz.md5 && \
     tar xzf mysql-connector-java-${MYSQL_VERSION}.tar.gz && \
     mv mysql-connector-java-${MYSQL_VERSION}/mysql-connector-java-${MYSQL_VERSION}.jar mysql-connector-java.jar && \

@@ -1,3 +1,7 @@
+# Version : 0.11.0
+
+upgrade: keycloak, mysql-connector
+
 # Version : 0.10.0
 
 fix: clustering setting
