@@ -1,6 +1,4 @@
 /keycloak/
 /tmp/
 
-/.secret.envrc
-
-/.vscode/
+/.envrc.secret
