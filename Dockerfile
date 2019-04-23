@@ -26,4 +26,11 @@ COPY keycloak/modules/system/layers/keycloak/com/mysql /opt/keycloak/modules/sys
 COPY --from=builder /opt/mysql-connector-java.jar /opt/keycloak/modules/system/layers/keycloak/com/mysql/main/mysql-connector-java.jar
 COPY entrypoint.sh /opt/entrypoint.sh
 
+RUN set -x && \
+    useradd keycloak && \
+    chown keycloak:keycloak -R /opt && \
+    :
+
+USER keycloak
+
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
